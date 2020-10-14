@@ -7,11 +7,11 @@ const buttonMatchMaking = document.querySelector(".matchmaking");
 
 const resultsList = document.querySelector(".results");
 
-// buttonLandenlijst.addEventListener("click", () => {
-//   console.log("Klik");
-// });
+buttonLandenlijst.addEventListener("click", () => {
+  renderCountryList(getCountryList());
+});
 
-// console.log(randomPersonData);
+// Maak een lijst van alle landen, gesorteerd op naam van het land.
 const getCountryList = () => {
   const countryList = randomPersonData.map((person) => person.region);
   const countryListWithoutDuplicates = countryList.reduce((unique, item) => {
@@ -22,11 +22,37 @@ const getCountryList = () => {
     }
   }, []);
 
-  const countryListSort = countryListWithoutDuplicates.sort();
-
-  return countryListSort;
+  return countryListWithoutDuplicates.sort();
 };
 
-console.log(getCountryList());
+const renderCountryList = (countryList) => {
+  countryList.map((listItem) => {
+    const listItemElement = document.createElement("li");
+    listItemElement.innerHTML = listItem;
+    resultsList.appendChild(listItemElement);
+    return listItemElement;
+  });
+};
 
-// const renderToDom
+//Steenbokvrouwen
+
+const getCapricornList = () => {
+  const capriCornList = randomPersonData.filter((person) => {
+    const birthDate = new Date(person.birthday.raw * 1000);
+    const birthYear = birthDate.getFullYear();
+    const birthMonth = birthDate.getMonth();
+    const birthDay = birthDate.getDate();
+    // console.log(birthMonth);
+    // console.log(birthDay);
+
+    const checkCapriCorn = () => {
+      if ((birthMonth <= 0 && birthDay < 18) || (birthMonth >= 11 && birthDay > 21)) {
+        return true;
+      }
+    };
+    return person.gender === "female" && birthYear >= 1990 && checkCapriCorn() === true;
+  });
+  return capriCornList;
+};
+
+console.log(getCapricornList());
