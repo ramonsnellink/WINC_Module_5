@@ -1,4 +1,4 @@
-const API_KEY = "5c7f765e6571bf5499a24d46718217de";
+const API_KEY = "";
 
 const getData = async () => {
   const apiUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`;
@@ -9,4 +9,3 @@ const getData = async () => {
     console.log(error);
   }
 };
-
