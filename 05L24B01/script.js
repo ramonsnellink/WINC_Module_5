@@ -14,14 +14,19 @@ const resultsList = document.querySelector(".results");
 // console.log(randomPersonData);
 const getCountryList = () => {
   const countryList = randomPersonData.map((person) => person.region);
-
   const countryListWithoutDuplicates = countryList.reduce((unique, item) => {
-    return unique.includes(item) ? unique : [...unique, item];
+    if (unique.includes(item)) {
+      return unique;
+    } else {
+      return [...unique, item];
+    }
   }, []);
 
   const countryListSort = countryListWithoutDuplicates.sort();
 
-  console.log(countryListSort);
+  return countryListSort;
 };
 
-getCountryList();
+console.log(getCountryList());
+
+// const renderToDom
