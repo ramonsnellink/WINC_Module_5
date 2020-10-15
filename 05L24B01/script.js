@@ -39,7 +39,6 @@ const renderCountryList = (countryList) => {
 const getCapricornList = () => {
   const capriCornList = randomPersonData.filter((person) => {
     const birthDate = new Date(person.birthday.raw * 1000);
-    const birthYear = birthDate.getFullYear();
     const birthMonth = birthDate.getMonth();
     const birthDay = birthDate.getDate();
     // console.log(birthMonth);
@@ -54,6 +53,15 @@ const getCapricornList = () => {
     return person.gender === "female" && person.age >= 30 && checkCapriCorn() === true;
   });
   return capriCornList;
+};
+
+const renderCapricornList = (capricornList) => {
+  capricornList.map((person) => {
+    // const listItemElement = document.createElement("li");
+    // listItemElement.innerHTML = listItem;
+    // resultsList.appendChild(listItemElement);
+    // return listItemElement;
+  });
 };
 
 console.log(getCapricornList());
