@@ -45,12 +45,13 @@ const getCapricornList = () => {
     // console.log(birthMonth);
     // console.log(birthDay);
 
+    // aparte filter per ding... dus eerst filter voor gender, dan
     const checkCapriCorn = () => {
-      if ((birthMonth <= 0 && birthDay < 18) || (birthMonth >= 11 && birthDay > 21)) {
+      if ((birthMonth === 0 && birthDay < 18) || (birthMonth === 11 && birthDay > 21)) {
         return true;
       }
     };
-    return person.gender === "female" && birthYear >= 1990 && checkCapriCorn() === true;
+    return person.gender === "female" && person.age >= 30 && checkCapriCorn() === true;
   });
   return capriCornList;
 };
