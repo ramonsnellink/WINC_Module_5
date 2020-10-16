@@ -146,28 +146,28 @@ const renderOldCreditcards = (oldCreditcardList) => {
 // Meeste mensen per land.
 
 const getMostPeoplePerCountry = () => {
-  const countryList = randomPersonData.map((person) => ({ region: person.region }));
+  const countryList = randomPersonData.map((person) => {
+    return person.region;
+  });
 
-  //https://stackoverflow.com/questions/37365512/count-the-number-of-times-a-same-value-appears-in-a-javascript-array
-  //   function getOccurrence(array, value) {
-  //     return array.filter((v) => (v === value)).length;
-  // }
+  const count = Array.from(
+    countryList.reduce((unique, item) => unique.set(item, (unique.get(item) || 0) + 1), new Map()),
+    ([country, count]) => ({ country, count })
+  );
 
-  // console.log(getOccurrence(arr, 1));  // 2
-  // console.log(getOccurrence(arr, 3));  // 3
-
-  const countryListWithoutDuplicates = countryList.reduce((unique, item) => {
-    if (unique.includes(item)) {
-      return unique;
-    } else {
-      return [...unique, item];
+  count.sort((a, b) => {
+    if (a.country < b.country) {
+      return -1;
     }
-  }, []);
-
-  return countryListWithoutDuplicates.sort();
+    if (a.country > b.country) {
+      return 1;
+    }
+    return 0;
+  });
+  return count;
 };
 
-console.log(getMostPeoplePerCountry());
+console.log("most People per Country:", getMostPeoplePerCountry());
 
 // const renderMostPeoplePerCountryList = (mostPeoplePerCountry) => {
 //   resultsList.innerHTML = " ";
