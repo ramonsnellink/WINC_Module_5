@@ -183,21 +183,38 @@ const renderMostPeopleList = (mostPeoplePerCountry) => {
 
 // Gemiddelde leeftijd
 
-//Om die zin te kunnen laten zien moeten we de gemiddelde leeftijd voor dat land berekenen.
+const calculateAvgAge = (countryName) => {
+  // Filter the total list to return only a list of people per country
+  const filteredCountryList = randomPersonData.filter((person) => {
+    return person.region.toLowerCase() === countryName.toLowerCase();
+  });
+
+  // Add all ages for that country together
+  const accumulatedAgePerCountry = filteredCountryList.reduce((total, person) => {
+    return (total += person.age);
+  }, 0);
+
+  const peoplePerCountry = filteredCountryList.length;
+  //Divide the total age by the list length
+  const avarageAge = Math.round(accumulatedAgePerCountry / peoplePerCountry);
+  return avarageAge;
+};
 
 const getAvgAgeCountry = () => {
-  const countryList = randomPersonData.map((countries) => countries.region);
+  const countryList = randomPersonData.map((countries) => {
+    return { country: countries.region, avgage: calculateAvgAge(countries.region) };
+  });
 
-  const countryListWithoutDoubles = [...new Set(countryList)];
+  // The code below I didn't invent myself: https://www.codementor.io/@nitinhepat/how-to-remove-duplicates-in-array-using-javascript-es6-15lc7px4g1#using-map
+  const dataArr = countryList.map((item) => {
+    return [item.country, item];
+  }); // creates array of array
 
-  console.log(countryListWithoutDoubles);
-
-  // maak filter op basis van de event value
-  // const met length van die filter
-  // const met alle ages opgeteld
-  // const met avg berekend
-
-  // bij de render:  countryButton.value = country;
+  const maparr = new Map(dataArr); // create key value pair from array of array
+  const removedDuplicates = [...maparr.values()]; //converting back to array from mapobject
+  return removedDuplicates;
 };
 
 console.log(getAvgAgeCountry());
+
+console.log("Avarage age in Nepal", calculateAvgAge("Nepal"));
