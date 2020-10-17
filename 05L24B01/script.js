@@ -19,6 +19,9 @@ buttonOudeCreditCards.addEventListener("click", () => {
   renderOldCreditcards(getOldCreditcards());
 });
 
+buttonMeesteMensen.addEventListener("click", () => {
+  renderMostPeopleList(getMostPeoplePerCountry());
+});
 // Maak een lijst van alle landen, gesorteerd op naam van het land.
 const getCountryList = () => {
   const countryList = randomPersonData.map((person) => person.region);
@@ -167,15 +170,34 @@ const getMostPeoplePerCountry = () => {
   return count;
 };
 
-console.log("most People per Country:", getMostPeoplePerCountry());
+const renderMostPeopleList = (mostPeoplePerCountry) => {
+  resultsList.innerHTML = " ";
 
-// const renderMostPeoplePerCountryList = (mostPeoplePerCountry) => {
-//   resultsList.innerHTML = " ";
+  mostPeoplePerCountry.map((listItem) => {
+    const listItemElement = document.createElement("li");
+    listItemElement.innerHTML = `${listItem.country}: ${listItem.count}`;
+    resultsList.appendChild(listItemElement);
+    return listItemElement;
+  });
+};
 
-//   countryList.map((listItem) => {
-//     const listItemElement = document.createElement("li");
-//     listItemElement.innerHTML = listItem;
-//     resultsList.appendChild(listItemElement);
-//     return listItemElement;
-//   });
-// };
+// Gemiddelde leeftijd
+
+//Om die zin te kunnen laten zien moeten we de gemiddelde leeftijd voor dat land berekenen.
+
+const getAvgAgeCountry = () => {
+  const countryList = randomPersonData.map((countries) => countries.region);
+
+  const countryListWithoutDoubles = [...new Set(countryList)];
+
+  console.log(countryListWithoutDoubles);
+
+  // maak filter op basis van de event value
+  // const met length van die filter
+  // const met alle ages opgeteld
+  // const met avg berekend
+
+  // bij de render:  countryButton.value = country;
+};
+
+console.log(getAvgAgeCountry());
