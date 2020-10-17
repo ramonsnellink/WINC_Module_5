@@ -5,22 +5,38 @@ const buttonMeesteMensen = document.querySelector(".meestemensen");
 const buttonGemiddeldeLeeftijd = document.querySelector(".gemiddeldeleeftijd");
 const buttonMatchMaking = document.querySelector(".matchmaking");
 
+const resultSentence = document.querySelector(".results__sentence");
+
 const resultsList = document.querySelector(".results");
 
 buttonLandenlijst.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+
   renderCountryList(getCountryList());
 });
 
 buttonSteenbokVrouwen.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+
   renderCapricornList(getCapricornList());
 });
 
 buttonOudeCreditCards.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+
   renderOldCreditcards(getOldCreditcards());
 });
 
 buttonMeesteMensen.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+
   renderMostPeopleList(getMostPeoplePerCountry());
+});
+
+buttonGemiddeldeLeeftijd.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+
+  renderAvgAgeCountry(getAvgAgeCountry());
 });
 // Maak een lijst van alle landen, gesorteerd op naam van het land.
 const getCountryList = () => {
@@ -202,7 +218,7 @@ const calculateAvgAge = (countryName) => {
 
 const getAvgAgeCountry = () => {
   const countryList = randomPersonData.map((countries) => {
-    return { country: countries.region, avgage: calculateAvgAge(countries.region) };
+    return { country: countries.region, avgage: calculateAvgAge(countries.region) }; // Calculate the avarage age and add it to the new object
   });
 
   // The code below I didn't invent myself: https://www.codementor.io/@nitinhepat/how-to-remove-duplicates-in-array-using-javascript-es6-15lc7px4g1#using-map
@@ -215,6 +231,22 @@ const getAvgAgeCountry = () => {
   return removedDuplicates;
 };
 
-console.log(getAvgAgeCountry());
+const renderAvgAgeCountry = (avgAgeCountry) => {
+  resultsList.innerHTML = " ";
 
-console.log("Avarage age in Nepal", calculateAvgAge("Nepal"));
+  avgAgeCountry.map((listItem) => {
+    const listItemElement = document.createElement("li");
+    const buttonElement = document.createElement("button");
+
+    buttonElement.innerHTML = listItem.country;
+
+    resultsList.appendChild(listItemElement);
+    listItemElement.appendChild(buttonElement);
+
+    buttonElement.addEventListener("click", () => {
+      resultSentence.innerHTML = `De gemiddelde persoon in ${listItem.country} is ${listItem.avgage} jaar oud`;
+    });
+
+    return listItemElement;
+  });
+};
