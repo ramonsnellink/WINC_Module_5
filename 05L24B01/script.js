@@ -11,32 +11,32 @@ const resultsList = document.querySelector(".results");
 
 buttonLandenlijst.addEventListener("click", () => {
   resultSentence.innerHTML = "";
-
   renderCountryList(getCountryList());
 });
 
 buttonSteenbokVrouwen.addEventListener("click", () => {
   resultSentence.innerHTML = "";
-
   renderCapricornList(getCapricornList());
 });
 
 buttonOudeCreditCards.addEventListener("click", () => {
   resultSentence.innerHTML = "";
-
   renderOldCreditcards(getOldCreditcards());
 });
 
 buttonMeesteMensen.addEventListener("click", () => {
   resultSentence.innerHTML = "";
-
   renderMostPeopleList(getMostPeoplePerCountry());
 });
 
 buttonGemiddeldeLeeftijd.addEventListener("click", () => {
   resultSentence.innerHTML = "";
-
   renderAvgAgeCountry(getAvgAgeCountry());
+});
+
+buttonMatchMaking.addEventListener("click", () => {
+  resultSentence.innerHTML = "";
+  renderZodiacList(getZodiacList());
 });
 // Maak een lijst van alle landen, gesorteerd op naam van het land.
 const getCountryList = () => {
@@ -248,5 +248,132 @@ const renderAvgAgeCountry = (avgAgeCountry) => {
     });
 
     return listItemElement;
+  });
+};
+
+const convertDateToZodiacSign = (month, day) => {
+  if ((month == 1 && day <= 20) || (month == 12 && day >= 22)) {
+    return "Steenbok";
+  } else if ((month == 1 && day >= 21) || (month == 2 && day <= 18)) {
+    return "Waterman";
+  } else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
+    return "Vissen";
+  } else if ((month == 3 && day >= 21) || (month == 4 && day <= 20)) {
+    return "Ram";
+  } else if ((month == 4 && day >= 21) || (month == 5 && day <= 20)) {
+    return "Stier";
+  } else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
+    return "Tweelingen";
+  } else if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) {
+    return "Kreeft";
+  } else if ((month == 7 && day >= 23) || (month == 8 && day <= 23)) {
+    return "Leeuw";
+  } else if ((month == 8 && day >= 24) || (month == 9 && day <= 23)) {
+    return "Maagd";
+  } else if ((month == 9 && day >= 24) || (month == 10 && day <= 23)) {
+    return "Weegschaal";
+  } else if ((month == 10 && day >= 24) || (month == 11 && day <= 22)) {
+    return "Schorpioen";
+  } else if ((month == 11 && day >= 23) || (month == 12 && day <= 21)) {
+    return "Boogschutter";
+  }
+};
+
+const whatIsPersonZodiac = (personName) => {
+  const getIndividualPerson = randomPersonData
+    .filter((person) => {
+      return person.name.toLocaleLowerCase() === personName.toLowerCase();
+    })
+    .map((person) => {
+      const birthDate = new Date(person.birthday.raw * 1000);
+      const month = birthDate.getMonth();
+      const day = birthDate.getDate();
+      const zodiac = convertDateToZodiacSign(month, day);
+      return zodiac;
+    });
+
+  return getIndividualPerson.join("");
+};
+
+const getZodiacList = () => {
+  const zodiacList = randomPersonData
+    .filter((person) => {
+      return person.age >= 18;
+    })
+    .map((person) => {
+      return {
+        name: person.name,
+        surname: person.surname,
+        zodiac: whatIsPersonZodiac(person.name),
+        photo: person.photo,
+        region: person.region,
+        age: person.age,
+      };
+    });
+
+  return zodiacList;
+};
+
+const renderZodiacList = (zodiacList) => {
+  resultsList.innerHTML = " ";
+
+  zodiacList.map((person) => {
+    const listItemImage = document.createElement("img");
+    const listItemElement = document.createElement("li");
+    const buttonElement = document.createElement("button");
+
+    listItemImage.src = person.photo;
+    buttonElement.innerHTML = "Vind Match";
+    listItemElement.innerHTML = `Naam: ${person.name} ${person.surname}. Sterrenbeeld: ${person.zodiac}. Leeftijd: ${person.age}. Land: ${person.region}. Leeftijd: ${person.age} `;
+
+    listItemElement.appendChild(buttonElement);
+    listItemElement.appendChild(listItemImage);
+    resultsList.appendChild(listItemElement);
+
+    buttonElement.addEventListener("click", () => {
+      const zodiacMatchList = findZodiacMatch(person);
+      renderZodiacMatch(zodiacMatchList, person);
+    });
+    return listItemElement;
+  });
+};
+
+const findZodiacMatch = (personToMatch) => {
+  console.log(personToMatch);
+  const findMatch = getZodiacList().filter((person) => {
+    return personToMatch.zodiac === person.zodiac && personToMatch.name != person.name;
+  });
+
+  return findMatch;
+};
+
+const renderZodiacMatch = (zodiacMatches, person) => {
+  resultsList.innerHTML = " ";
+  resultSentence.innerHTML = `${person.name} matched met deze personen:`;
+
+  zodiacMatches.map((person) => {
+    const listItemImage = document.createElement("img");
+    const listItemElement = document.createElement("li");
+    const buttonElement = document.createElement("button");
+
+    listItemImage.src = person.photo;
+    buttonElement.innerHTML = "Vind Match";
+    listItemElement.innerHTML = `Naam: ${person.name} ${person.surname}. Sterrenbeeld: ${person.zodiac}. Leeftijd: ${person.age}. Land: ${person.region}. Leeftijd: ${person.age} `;
+
+    listItemElement.appendChild(buttonElement);
+    listItemElement.appendChild(listItemImage);
+    resultsList.appendChild(listItemElement);
+
+    buttonElement.addEventListener("click", () => {
+      const zodiacMatchList = findZodiacMatch(person);
+      renderZodiacMatch(zodiacMatchList, person);
+      resultSentence.innerHTML = `${person.name} matched met deze personen:`;
+    });
+
+    return listItemElement;
+
+    // buttonElement.addEventListener("click", () => {
+    //   resultSentence.innerHTML = `De gemiddelde persoon in ${listItem.country} is ${listItem.avgage} jaar oud`;
+    // });
   });
 };
